@@ -53,16 +53,16 @@ Static sstp client library.
 Statyczna biblioteka kliencka sstp.
 
 %package -n ppp-plugin-sstp
-Summary:	Common files for %{name} library
-Summary(pl.UTF-8):	Wspólne pliki biblioteki %{name}
-Group:		Libraries
+Summary:	pppd plugin to relay the MPPE keys to sstp-client
+Summary(pl.UTF-8):	Wtyczka pppd przekazująca klucze MPPE do klienta sstp
+Group:		Daemons
 Requires:	%{name} = %{version}-%{release}
 
 %description -n ppp-plugin-sstp
-Common files for %{name} library.
+pppd plugin to relay the MPPE keys to sstp-client.
 
 %description -n ppp-plugin-sstp -l pl.UTF-8
-Wspólne pliki biblioteki %{name}.
+Wtyczka pppd przekazująca klucze MPPE do klienta sstp.
 
 %prep
 %setup -q
