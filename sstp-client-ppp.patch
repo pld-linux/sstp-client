@@ -1,0 +1,46 @@
+--- sstp-client-1.0.18/src/pppd-plugin/sstp-plugin.c.orig	2022-09-02 18:41:52.000000000 +0200
++++ sstp-client-1.0.18/src/pppd-plugin/sstp-plugin.c	2024-09-22 10:13:25.121832771 +0200
+@@ -36,7 +36,8 @@
+ #include <pppd/fsm.h>
+ #include <pppd/lcp.h>
+ #include <pppd/eap.h>
+-#include <pppd/chap-new.h>
++#include <pppd/chap.h>
++#include <pppd/options.h>
+ 
+ #include <sstp-api.h>
+ #include <sstp-mppe.h>
+@@ -109,7 +110,7 @@ static void sstp_send_notify()
+         key_len = mppe_get_send_key(key, sizeof(key));
+         if (key_len > 0) {
+             sstp_api_attr_add(msg, SSTP_API_ATTR_MPPE_SEND, key_len, key);
+-            if (debug) {
++            if (debug_on()) {
+                 dbglog("The mppe send key (%d): %0.*B", key_len, key_len, key);
+             }
+         }
+@@ -117,7 +118,7 @@ static void sstp_send_notify()
+         key_len = mppe_get_recv_key(key, sizeof(key));
+         if (key_len > 0) {
+             sstp_api_attr_add(msg, SSTP_API_ATTR_MPPE_RECV, key_len, key);
+-            if (debug) {
++            if (debug_on()) {
+                 dbglog("The mppe recv key (%d): %0.*B", key_len, key_len, key);
+             }
+         }
+@@ -259,13 +260,13 @@ void plugin_init(void)
+     add_options(sstp_option);
+ 
+ #ifdef USE_PPPD_AUTH_HOOK
+-    add_notifier(&auth_up_notifier, sstp_auth_done, NULL);
++    ppp_add_notify(NF_AUTH_UP, sstp_auth_done, NULL);
+ #else
+     /* Let's snoop for CHAP authentication */
+     snoop_recv_hook = sstp_snoop_recv;
+ 
+     /* Add ip-up notifier */
+-    add_notifier(&ip_up_notifier, sstp_ip_up, NULL);
++    ppp_add_notify(NF_IP_UP, sstp_ip_up, NULL);
+ #endif
+ }
+ 

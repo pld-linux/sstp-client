@@ -1,21 +1,22 @@
 #
 # Conditional build:
-%bcond_without	static_libs	# static libraries
+%bcond_without	static_libs	# static library
 #
 Summary:	SSTP client for Linux
 Summary(pl.UTF-8):	Klient SSTP dla Linuksa
 Name:		sstp-client
-Version:	1.0.17
+Version:	1.0.18
 Release:	1
 License:	GPL v2+
 Group:		Libraries
 Source0:	https://downloads.sourceforge.net/sstp-client/%{name}-%{version}.tar.gz
-# Source0-md5:	ca563f85badc4e4549e95aa42b2bf081
+# Source0-md5:	04ec1868f825d3218173a95bc9b9eff2
+Patch0:		%{name}-ppp.patch
 URL:		http://sstp-client.sourceforge.net/
 BuildRequires:	libevent-devel >= 2.0.10
 BuildRequires:	openssl-devel
 BuildRequires:	pkgconfig
-BuildRequires:	ppp-plugin-devel >= 2.4.9
+BuildRequires:	ppp-plugin-devel >= 3:2.5.0
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -57,6 +58,7 @@ Summary:	pppd plugin to relay the MPPE keys to sstp-client
 Summary(pl.UTF-8):	Wtyczka pppd przekazująca klucze MPPE do klienta sstp
 Group:		Daemons
 Requires:	%{name} = %{version}-%{release}
+Requires:	ppp >= 3:2.5.0
 
 %description -n ppp-plugin-sstp
 pppd plugin to relay the MPPE keys to sstp-client.
@@ -66,6 +68,7 @@ Wtyczka pppd przekazująca klucze MPPE do klienta sstp.
 
 %prep
 %setup -q
+%patch0 -p1
 
 %build
 %configure \
