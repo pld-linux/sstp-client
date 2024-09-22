@@ -1,5 +1,5 @@
 --- sstp-client-1.0.18/src/pppd-plugin/sstp-plugin.c.orig	2022-09-02 18:41:52.000000000 +0200
-+++ sstp-client-1.0.18/src/pppd-plugin/sstp-plugin.c	2024-09-22 10:13:25.121832771 +0200
++++ sstp-client-1.0.18/src/pppd-plugin/sstp-plugin.c	2024-09-22 11:18:57.294579165 +0200
 @@ -36,7 +36,8 @@
  #include <pppd/fsm.h>
  #include <pppd/lcp.h>
@@ -28,8 +28,12 @@
                  dbglog("The mppe recv key (%d): %0.*B", key_len, key_len, key);
              }
          }
-@@ -259,13 +260,13 @@ void plugin_init(void)
-     add_options(sstp_option);
+@@ -256,16 +257,16 @@ void plugin_init(void)
+     memset(&sstp_sock, 0, sizeof(sstp_sock));
+ 
+     /* Allow us to intercept options */
+-    add_options(sstp_option);
++    ppp_add_options(sstp_option);
  
  #ifdef USE_PPPD_AUTH_HOOK
 -    add_notifier(&auth_up_notifier, sstp_auth_done, NULL);
